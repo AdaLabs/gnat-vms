@@ -12,21 +12,16 @@ This project aims to build an ia64-hp-openvms Ada 83 compiler. The compiler is b
 FSF COTS        | Version
 ----------------|----------
 GCC             | 4.7 
-----------------|----------
 Binutils        | 2.23.1
-----------------|----------
 MPC             | 0.8.1
-----------------|----------
 GMP             | 4.3.2
-----------------|----------
 MPFR            | 2.4.2
-----------------|----------
 
-We can view this journey as finding a way to cross a river. In order get to the other side of the rver, We will craft 3 stones, and we will use these stones to reach the opposite border of the river
+We can view this journey as finding a way to cross a river. In order get to the other side of the river, We will craft 3 stones, and we will use these stones to reach the opposite border of the river
 without falling into it.
 Each stone depends on the previous ones, that is why we need the same compiler source from the very beginning.
 
-It is your duty to review the scripts, that also ask for root passwords during install process.
+It is your duty to review the scripts, :warning: that also ask for root passwords during install process.
 
 ## 1. Prepare the native operating system
 
