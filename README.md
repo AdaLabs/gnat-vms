@@ -1,7 +1,7 @@
 # gnat-vms
 
 This project is from the initiative of PIA-SOFER, who contacted AdaLabs in order to resurect the GCC GNAT Ada 83 VMS compiler, that is no more supported by AdaCore for new clients. 
-While some patches has been (some times partialy) recovered from the gcc and binutil mailing lists, some patches are from AdaLabs, 
+While some patches has been (some times partially) recovered from the gcc and binutil mailing lists, some patches are from AdaLabs,
 and these last ones are licensed using the same license of the underlaying FSF components, while being co-owned by AdaLabs and PIA-SOFER.
 
 :broken_heart: However, unfortunatly, this repository is not sufficient for you to build the GCC GNAT Ada 83 VMS compiler, as VMS based system headers are needed during the build process,
@@ -54,6 +54,14 @@ Enter in your schrooted Wheezy OS
 ```bash
    $ schroot -c wheezy
 ```
+
+### 1.2 Download the FSF tarballs
+
+In the command below, we will download the GCC, Binutils, MPC, GMP and MPFR tarballs
+```bash
+   $ ./scripts/update-tarballs.sh
+```
+
 
 ## 2. build native compiler
 
