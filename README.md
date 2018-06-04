@@ -151,7 +151,7 @@ The script below will ask you a few questions and verifications, without exiting
 It will ask for your *root password*, so it is your duty to review it.
 ```bash
    $ cd $GNAT_VMS_ROOT_PATH
-   $ ./scripts/install-gcc-native.sh
+   $ ./scripts/install-gcc-cross.sh
 ```
 
 In order to test the newly installed cross compiler, let's build the "hello world" test on *x86_64-linux*, and run it on *ia64-hp-openvms*
