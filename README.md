@@ -50,8 +50,11 @@ Enter in your schrooted Wheezy OS
 
 ## 2. Download the FSF tarballs
 
-In the script below, we will download the GCC, Binutils, MPC, GMP and MPFR tarballs
+In the script below, we will download the GCC, Binutils, MPC, GMP and MPFR tarballs.
+In the code below, replace **<YOUR_PROJECT_PATH>** with your git project path
 ```bash
+   $ export GNAT_VMS_ROOT_PATH=<YOUR_PROJECT_PATH>
+   $ cd $GNAT_VMS_ROOT_PATH
    $ ./scripts/update-tarballs.sh
 ```
 
@@ -71,12 +74,14 @@ The script below will ask you a few questions and verifications, without exiting
 It will ask for your *root password*, so it is your duty to review it.
 ```bash
    $ export GNAT_VMS_ROOT_PATH=<YOUR_PROJECT_PATH>
+   $ cd $GNAT_VMS_ROOT_PATH
    $ ./scripts/install-gcc-native.sh
 ```
 
 In order to test the newly installed native compiler, let's build and run the "hello world" test.
 
 ```bash
+   $ cd $GNAT_VMS_ROOT_PATH
    $ export PATH=/opt/local/4.7/x86_64-linux-gnu/bin:$PATH
    $ cd tests
    $ gnatmake sources/hello.adb
@@ -92,6 +97,80 @@ In this section, we will build the *x86_64-linux-gnu-native* to *ia64-hp-openvms
 Build        | Host         | Target
 ------------ |--------------|------
 x86_64-linux | x86_64-linux | ia64-hp-openvms
+
+In the code below, replace **<YOUR_PROJECT_PATH>** with your git project path
+```bash
+   $ export GNAT_VMS_ROOT_PATH=<YOUR_PROJECT_PATH>
+```
+
+### 4.1 Build cross binutils
+
+The script below will ask you a few questions and verifications, without exiting in error. 
+It will ask for your *root password*, so it is your duty to review it.
+```bash
+   $ cd $GNAT_VMS_ROOT_PATH
+   $ ./scripts/mk-cross-binutils.sh
+```
+
+
+### 4.2 Build cross gcc
+
+
+#### 4.2.1 Setup sysroot
+
+The **$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/** sysroot shall contain two sub folders, **include** and **lib**.
+
+**sysroot include sub-folder**
+```bash
+$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/include/:
+_g_config.h  changes      ctype-gnu.h  errno.h  gen64def.h   limits.h  perror.h   setjmp.h   stdarg.h  stdlib.h   sys       unixio.h    varargs.h
+ansidecl.h   copying3     ctype.h      fcntl.h  gnumalloc.h  locale.h  pthread.h  signal.h   stddef.h  string.h   time.h    unixlib.h   vms
+assert.h     ctype-dec.h  dirent.h     float.h  libgen.h     math.h    rms.h      starlet.h  stdio.h   strings.h  unistd.h  va-alpha.h  wchar.h
+
+$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/include.adacore/sys:
+file.h  param.h  stat.h  time.h  times.h  types.h  wait.h
+
+$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/include.adacore/vms:
+atrdef.h     chfdef.h   fab.h     fatdef.h  intstkdef.h  libicb.h  namdef.h   pdscdef.h  rms.h    starlet.h  xab.h        xabfhcdef.h
+chfctxdef.h  descrip.h  fabdef.h  fibdef.h  iodef.h      nam.h     ossddef.h  pthread.h  ssdef.h  stsdef.h   xabdatdef.h
+```
+
+**sysroot lib sub-folder**
+```bash
+$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/lib/:
+cma$tis_shr.exe  decc$shr.exe  imagelib.exe  ldscripts  libdecc$shr.exe  libdeccshr.a  libimagelib.a  
+libots.exe  librtl.a  librtl.exe  libstarlet.a  libsys$public_vectors.a  starlet.exe  sys$public_vectors.exe
+
+$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/lib/ldscripts:
+elf64_ia64_vms.x  elf64_ia64_vms.xbn  elf64_ia64_vms.xn  elf64_ia64_vms.xr  elf64_ia64_vms.xu
+```
+
+#### 4.2.2 Build 
+
+The script below will ask you a few questions and verifications, without exiting in error. 
+It will ask for your *root password*, so it is your duty to review it.
+```bash
+   $ cd $GNAT_VMS_ROOT_PATH
+   $ ./scripts/install-gcc-native.sh
+```
+
+In order to test the newly installed cross compiler, let's build the "hello world" test on *x86_64-linux*, and run it on *ia64-hp-openvms*
+
+```bash
+   $ cd $GNAT_VMS_ROOT_PATH
+   $ export PATH=/opt/local/4.7/ia64-hp-openvms/bin:$PATH
+   $ cd tests
+   $ ia64-hp-openvms-gnatmake --RTS=/opt/local/4.7/ia64-hp-openvms/lib/gcc/ia64-hp-openvms/4.7.4/ sources/hello.adb
+   $ file hello.exe
+hello.exe: ELF 64-bit LSB executable, IA-64, version 1 (OpenVMS), dynamically linked, not stripped
+```
+
+Great, we got an ELF IA-64 OpenVMS binary file, upload the *hello.exe* binary on your VMS station, and run it !
+
+```bash
+   $ run hello.exe
+hello world !
+```
 
 
 ## 5. Build canadian compiler
