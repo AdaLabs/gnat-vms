@@ -172,6 +172,40 @@ Great, we got an ELF IA-64 OpenVMS binary file, upload the *hello.exe* binary on
 hello world !
 ```
 
+#### 4.2.3 Little tweak for ia64-hp-openvms-gcc
+
+In order for the compiler to properly detect the default runtime, we will replace the ia64-hp-openvms-gcc symbolink link by a script that internally specifiy the runtime
+```bash
+cd /opt/local/4.7/ia64-hp-openvms/bin
+sudo rm ia64-hp-openvms-gcc
+sudo touch ia64-hp-openvms-gcc
+sudo chmod +x ia64-hp-openvms-gcc
+sudo nano ia64-hp-openvms-gcc
+```
+
+Add the following content to the script file (/opt/local/4.7/ia64-hp-openvms/bin/ia64-hp-openvms-gcc)
+```bash
+#!/bin/bash
+ia64-hp-openvms-gcc.exe --RTS=/opt/local/4.7/ia64-hp-openvms/lib/gcc/ia64-hp-openvms/4.7.4/ "$@"
+```
+
+#### 4.2.4 Little tweak for ia64-hp-openvms-gnatmake
+
+In order for the compiler to properly detect the default runtime, we will replace the ia64-hp-openvms-gnatmake symbolink link by a script that internally specifiy the runtime
+
+```bash
+cd /opt/local/4.7/ia64-hp-openvms/bin
+sudo rm ia64-hp-openvms-gnatmake
+sudo touch ia64-hp-openvms-gnatmake
+sudo chmod +x ia64-hp-openvms-gnatmake
+sudo nano ia64-hp-openvms-gnatmake
+```
+
+Add the following content to the script file (/opt/local/4.7/ia64-hp-openvms/bin/ia64-hp-openvms-gnatmake)
+```bash
+#!/bin/bash
+ia64-hp-openvms-gnatmake.exe --RTS=/opt/local/4.7/ia64-hp-openvms/lib/gcc/ia64-hp-openvms/4.7.4/ "$@"
+```
 
 ## 5. Build canadian compiler
 
@@ -181,5 +215,30 @@ In this section, we will build the *ia64-hp-openvms* to *ia64-hp-openvms* canadi
 Build        | Host            | Target
 ------------ |-----------------|------
 x86_64-linux | ia64-hp-openvms | ia64-hp-openvms
+
+
+In the code below, replace **<YOUR_PROJECT_PATH>** with your git project path
+```bash
+   $ export GNAT_VMS_ROOT_PATH=<YOUR_PROJECT_PATH>
+```
+
+### 5.1 Build canadian gcc
+
+The script below will ask you a few questions and verifications, without exiting in error. 
+It will ask for your *root password*, so it is your duty to review it.
+```bash
+   $ cd $GNAT_VMS_ROOT_PATH
+   $ ./scripts/install-gcc-canadian.sh
+```
+
+If all is going fine, you will end with 
+```bash
+Great, please build gnattools on target
+```
+
+### 5.2 Upload the compiler to target
+
+
+### 5.3 Build GNATTOOLS on target
 
 
