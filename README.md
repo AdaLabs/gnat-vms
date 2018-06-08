@@ -244,7 +244,7 @@ It will ask for your *root password*, so it is your duty to review it.
    $ ./scripts/mk-canadian-binutils.sh
 ```
 
-### 5.3 Upload compiler to ia64-hp-openvms
+### 5.3 Upload compiler parts to VMS
 
 #### 5.3.1 Compiler binary files
 ```bash
@@ -269,7 +269,6 @@ cd /opt/local/4.7/canadian/lib/gcc/ia64-hp-openvms/4.7.4/
 zip -r $GNAT_VMS_ROOT_PATH/dist/gnat-vms-rts.zip adalib adainclude
 ```
 
-#### 5.3.4 Upload to VMS
 
 Using your favorite ftp client, upload the zip archives to VMS. 
 *Kindly note that any file can be erroneous if transfered without the zip encapsulation.*
@@ -298,7 +297,7 @@ UNZIP gnat-vms-rts.zip
 
 #### 5.4.3 setup compiler
 
-The follozwing with enable you to build using *GNAT MAKE hello.adb*
+The following with enable you to use the compiler using *GNAT MAKE hello.adb*
 ```bash
 define ADA_OBJECTS_PATH DISK$USERS:[2018.GNAT.ADALIB]
 define ADA_INCLUDE_PATH DISK$USERS:[2018.GNAT.ADAINCLUDE]
@@ -309,7 +308,9 @@ GNATMAKE :==$DISK$USERS:[2018.GNAT.BIN]gnatmake.exe
 GCC :==$DISK$USERS:[2018.GNAT.BIN]gcc.exe
 ```
 
+#### 5.4.4 Little tweak for crt files 
+
 unzip the gnat-vms-crt.zip in your working directory for the crt files to be taken during link time.
 
 
-enjoy !
+## 6. Enjoy !
