@@ -231,14 +231,85 @@ It will ask for your *root password*, so it is your duty to review it.
    $ ./scripts/install-gcc-canadian.sh
 ```
 
-If all is going fine, you will end with 
+If all is going fine, you will end with a list of all ia64-hp-openvms executables
+
+### 5.2 Build canadian binutils
+
+We will build binuutils only to use the *as* component. The *ld* component will be built in gcc (above), as it is a wrapper to the *VMS LINKER*
+
+The script below will ask you a few questions and verifications, without exiting in error. 
+It will ask for your *root password*, so it is your duty to review it.
 ```bash
-Great, please build gnattools on target
+   $ cd $GNAT_VMS_ROOT_PATH
+   $ ./scripts/mk-canadian-binutils.sh
 ```
 
-### 5.2 Upload the compiler to target
+### 5.3 Upload compiler to ia64-hp-openvms
+
+#### 5.3.1 Compiler binary files
+```bash
+rm -rf $GNAT_VMS_ROOT_PATH/dist/*
+cd BUILD/gcc-${GCC_FULL_VERSION}-canadian/gcc
+zip $GNAT_VMS_ROOT_PATH/dist/gnat-vms-bin.zip gnatmake.exe gnatlink.exe gnat.exe gnatbind.exe gnat1.exe ld.exe
+cp xgcc.exe $GNAT_VMS_ROOT_PATH/dist/gcc.exe
+cp /opt/local/4.7/canadian/bin/as $GNAT_VMS_ROOT_PATH/dist/as.exe
+zip $GNAT_VMS_ROOT_PATH/dist/gnat-vms-bin.zip $GNAT_VMS_ROOT_PATH/dist/as.exe
+zip $GNAT_VMS_ROOT_PATH/dist/gnat-vms-bin.zip $GNAT_VMS_ROOT_PATH/dist/gcc.exe
+```
+
+#### 5.3.2 Compiler crt files
+```bash
+cd BUILD/gcc-${GCC_FULL_VERSION}-canadian/gcc
+zip $GNAT_VMS_ROOT_PATH/dist/gnat-vms-crt.zip pcrt0.o crtbegin.o crtend.o
+```
+
+#### 5.3.3 Compiler Ada runtime files
+```bash
+cd /opt/local/4.7/canadian/lib/gcc/ia64-hp-openvms/4.7.4/
+zip -r $GNAT_VMS_ROOT_PATH/dist/gnat-vms-rts.zip adalib adainclude
+```
+
+#### 5.3.4 Upload to VMS
+
+Using your favorite ftp client, upload the zip archives to VMS. 
+*Kindly note that any file can be erroneous if transfered without the zip encapsulation.*
 
 
-### 5.3 Build GNATTOOLS on target
+### 5.4 Setup VMS compiler environment
+
+#### 5.4.1 setup compiler directory structure
+
+```bash
+CREATE/DIRECTORY DISK$USERS:[2018.GNAT.BIN]
+CREATE/DIRECTORY DISK$USERS:[2018.GNAT.ADALIB]
+CREATE/DIRECTORY DISK$USERS:[2018.GNAT.INCLUDE]
+```
+
+#### 5.4.2 deploy the compiler
 
 
+```bash
+COPY gnat-vms-bin.zip DISK$USERS:[2018.GNAT.BIN]
+UNZIP gnat-vms-bin.zip
+
+COPY gnat-vms-rts.zip DISK$USERS:[2018.GNAT]
+UNZIP gnat-vms-rts.zip
+```
+
+#### 5.4.3 setup compiler
+
+The follozwing with enable you to build using *GNAT MAKE hello.adb*
+```bash
+define ADA_OBJECTS_PATH DISK$USERS:[2018.GNAT.ADALIB]
+define ADA_INCLUDE_PATH DISK$USERS:[2018.GNAT.ADAINCLUDE]
+define VAXC$PATH DISK$USERS:[2018.GNAT.BIN]
+GNAT :==$DISK$USERS:[2018.GNAT.BIN]gnat.exe
+AS :==$DISK$USERS:[2018.GNAT.BIN]as.exe
+GNATMAKE :==$DISK$USERS:[2018.GNAT.BIN]gnatmake.exe
+GCC :==$DISK$USERS:[2018.GNAT.BIN]gcc.exe
+```
+
+unzip the gnat-vms-crt.zip in your working directory for the crt files to be taken during link time.
+
+
+enjoy !

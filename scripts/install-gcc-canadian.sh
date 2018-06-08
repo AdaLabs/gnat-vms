@@ -134,7 +134,12 @@ make all-target-libada 2>&1 | tee -a all-target-libada.log
 echo "Press enter if everything is ok for [all-target-libada]"
 read
 
-sudo su -c "PATH=/opt/local/${GCC_VERSION}/x86_64-linux-gnu/bin:/opt/local/${GCC_VERSION}/${TARGET}/bin:/usr/bin:/bin make install-target-libada  2>&1 | tee install-target-libada.log"
+make all-gnattools 2>&1 | tee -a all-gnattools.log
+# This will configure and then generate errors, it is on purpose, as we will relaunch specific commands just after
 
-echo "Great, please build gnattools on target"
+cd gnattools
+make -C ../gcc/ada/tools -f ../Makefile "CC=ia64-hp-openvms-gcc" "CFLAGS=-g -O2 -W -Wall" "LDFLAGS=" "ADAFLAGS=-gnatpg -gnata" "ADA_CFLAGS=" "INCLUDES=-I. -I.. -I../.. -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc/ada -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc/config -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc/../include -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc" "ADA_INCLUDES=-I/opt/local/${GCC_VERSION}/${TARGET}/lib/gcc/${TARGET}/${GCC_FULL_VERSION}/adalib/../adainclude -I/opt/local/${GCC_VERSION}/${TARGET}/lib/gcc/${TARGET}/${GCC_FULL_VERSION}/adalib/ -I. -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc/ada" "exeext=" "fsrcdir=${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc" "srcdir=${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc" "GNATMAKE=ia64-hp-openvms-gnatmake" "GNATLINK=ia64-hp-openvms-gnatlink" "GNATBIND=ia64-hp-openvms-gnatbind" "TOOLSCASE=cross" "LIBGNAT=" INCLUDES="" exeext=".exe" gnatmake-re gnatlink-re  2>&1 | tee -a gnatmake-and-gnatlink.log
+make -C ../gcc/ada/tools -f ../Makefile "CC=ia64-hp-openvms-gcc" "CFLAGS=-g -O2 -W -Wall" "LDFLAGS=" "ADAFLAGS=-gnatpg -gnata" "ADA_CFLAGS=" "INCLUDES=-I. -I.. -I../.. -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc/ada -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc/config -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc/../include -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc" "ADA_INCLUDES=-I/opt/local/${GCC_VERSION}/${TARGET}/lib/gcc/${TARGET}/${GCC_FULL_VERSION}/adalib/../adainclude -I/opt/local/${GCC_VERSION}/${TARGET}/lib/gcc/${TARGET}/${GCC_FULL_VERSION}/adalib/ -I. -I${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc/ada" "exeext=" "fsrcdir=${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc" "srcdir=${BUILDROOT}/src/gcc-${GCC_FULL_VERSION}/gcc" "GNATMAKE=ia64-hp-openvms-gnatmake" "GNATLINK=ia64-hp-openvms-gnatlink" "GNATBIND=ia64-hp-openvms-gnatbind" "TOOLSCASE=cross" "LIBGNAT=" INCLUDES="" exeext=".exe" common-tools  2>&1 | tee -a common-tools.log
+
+file ../gcc/*.exe
 
