@@ -20,7 +20,13 @@ It is your duty to review the scripts, :warning: that also asks for root passwor
 
 ## 1. Prepare the native operating system
 
-If you are using an Ubuntu 14.04 (Trusty Tahr) or Debian 7 (Wheezy), you can proceed directly without a schroot environment. If you are using a more recent operating system, you will need to setup a schroot environment to install one of the above OS.
+If you are using an Ubuntu 14.04 (Trusty Tahr) or Debian 7 (Wheezy), you can proceed directly without a schroot environment, after making sure you have the following packages.
+
+```bash
+$ sudo aptitude install gnat sudo nano wget rpl build-essential m4 flex bison lsb-release texinfo
+```
+
+ If you are using a more recent operating system, you will need to setup a schroot environment to install one of the above OS.
 
 ### 1.1 Setup a schroot environment
 
@@ -29,7 +35,7 @@ Kindly read the paragraph above to make sure that this is mandatory for you.
 In this example, we will install a Debian 7 (Wheezy) x86_64. In the console, install the schroot packages and create the chrooted OS
 ```bash
    $ sudo aptitude install debootstrap schroot
-   $ debootstrap --include=gnat,sudo,nano,wget,build-essential,m4,flex,bison,lsb-release,texinfo  wheezy /opt/local/schroots/wheezy
+   $ debootstrap --include=gnat,sudo,nano,wget,rpl,build-essential,m4,flex,bison,lsb-release,texinfo  wheezy /opt/local/schroots/wheezy
 ```
 
 Add the schrooted Wheezy OS to your configuration. In the code below, Replace **<YOUR_USERNAME>** with your username
@@ -127,10 +133,10 @@ _g_config.h  changes      ctype-gnu.h  errno.h  gen64def.h   limits.h  perror.h 
 ansidecl.h   copying3     ctype.h      fcntl.h  gnumalloc.h  locale.h  pthread.h  signal.h   stddef.h  string.h   time.h    unixlib.h   vms
 assert.h     ctype-dec.h  dirent.h     float.h  libgen.h     math.h    rms.h      starlet.h  stdio.h   strings.h  unistd.h  va-alpha.h  wchar.h
 
-$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/include.adacore/sys:
+$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/include/sys:
 file.h  param.h  stat.h  time.h  times.h  types.h  wait.h
 
-$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/include.adacore/vms:
+$GNAT_VMS_ROOT_PATH/sysroots/ia64-hp-openvms/include/vms:
 atrdef.h     chfdef.h   fab.h     fatdef.h  intstkdef.h  libicb.h  namdef.h   pdscdef.h  rms.h    starlet.h  xab.h        xabfhcdef.h
 chfctxdef.h  descrip.h  fabdef.h  fibdef.h  iodef.h      nam.h     ossddef.h  pthread.h  ssdef.h  stsdef.h   xabdatdef.h
 ```
@@ -177,7 +183,7 @@ hello world !
 In order for the compiler to properly detect the default runtime, we will replace the ia64-hp-openvms-gcc symbolink link by a script that internally specifiy the runtime
 ```bash
 cd /opt/local/4.7/ia64-hp-openvms/bin
-sudo rm ia64-hp-openvms-gcc
+sudo mv ia64-hp-openvms-gcc ia64-hp-openvms-gcc.exe
 sudo touch ia64-hp-openvms-gcc
 sudo chmod +x ia64-hp-openvms-gcc
 sudo nano ia64-hp-openvms-gcc
@@ -195,7 +201,7 @@ In order for the compiler to properly detect the default runtime, we will replac
 
 ```bash
 cd /opt/local/4.7/ia64-hp-openvms/bin
-sudo rm ia64-hp-openvms-gnatmake
+sudo mv ia64-hp-openvms-gnatmake ia64-hp-openvms-gnatmake.exe
 sudo touch ia64-hp-openvms-gnatmake
 sudo chmod +x ia64-hp-openvms-gnatmake
 sudo nano ia64-hp-openvms-gnatmake
@@ -235,7 +241,7 @@ If all is going fine, you will end with a list of all ia64-hp-openvms executable
 
 ### 5.2 Build canadian binutils
 
-We will build binuutils only to use the *as* component. The *ld* component will be built in gcc (above), as it is a wrapper to the *VMS LINKER*
+We will build binutils only to use the *as* component. The *ld* component will be built in gcc (above), as it is a wrapper to the *VMS LINKER*
 
 The script below will ask you a few questions and verifications, without exiting in error. 
 It will ask for your *root password*, so it is your duty to review it.

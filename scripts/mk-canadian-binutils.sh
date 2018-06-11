@@ -35,8 +35,8 @@ UTILS=binutils-2.23.1
 export PATH=${ROOT_PATH}/utilities/binaries:${PATH}
 gnatmake -P ${ROOT_PATH}/utilities/utilities.gpr
 
-export LD_LIBRARY_PATH=/opt/local/${GCC_VERSION}/x86_64-linux-gnu/lib:$LD_LIBRARY_PATH
-export PATH=/opt/local/${GCC_VERSION}/x86_64-linux-gnu/bin:/opt/local/${GCC_VERSION}/${TARGET}/bin:$PATH
+export LD_LIBRARY_PATH=/opt/local/${GCC_VERSION}/${TARGET}/lib:$LD_LIBRARY_PATH
+export PATH=/opt/local/${GCC_VERSION}/${TARGET}/bin:$PATH
 rm -rf ${BUILDROOT}/src/BUILD/${UTILS}
 
 mkdir -p ${BUILDROOT}/src
@@ -65,6 +65,11 @@ CC=ia64-hp-openvms-gcc ../../${UTILS}/configure --build=${BUILD} --host=${HOST} 
 #
 #                 all-gcc
 #
+make 2>&1 | tee mk-canadian-binutils.build.log
+#  above only for libiberty to be called, so that following rpl commands can be applied
+rpl -i "#define pid_t int" "//AL#define pid_t int" ${BUILDROOT}/src/BUILD/${UTILS}/libiberty/config.h
+rpl -i "#define ssize_t int" "//AL#define ssize_t int" ${BUILDROOT}/src/BUILD/${UTILS}/libiberty/config.h
+
 
 make 2>&1 | tee mk-canadian-binutils.build.log
 
@@ -93,3 +98,4 @@ read
 sudo su -c "PATH=/opt/local/${GCC_VERSION}/x86_64-linux-gnu/bin:/opt/local/${GCC_VERSION}/${TARGET}/bin:/usr/bin:/bin make install 2>&1 | tee mk-canadian-binutils.install.log"
 	
 
+file /opt/local/${GCC_VERSION}/canadian/bin/as
