@@ -255,7 +255,7 @@ It will ask for your *root password*, so it is your duty to review it.
 #### 5.3.1 Compiler binary files
 ```bash
 rm -rf $GNAT_VMS_ROOT_PATH/dist/*
-cd BUILD/gcc-${GCC_FULL_VERSION}-canadian/gcc
+cd $GNAT_VMS_ROOT_PATH/builds/4.7/ia64-hp-openvms-canadian/src/BUILD/gcc-4.7.4-canadian/gcc/
 zip $GNAT_VMS_ROOT_PATH/dist/gnat-vms-bin.zip gnatmake.exe gnatlink.exe gnat.exe gnatbind.exe gnat1.exe ld.exe
 cp xgcc.exe $GNAT_VMS_ROOT_PATH/dist/gcc.exe
 cp /opt/local/4.7/canadian/bin/as $GNAT_VMS_ROOT_PATH/dist/as.exe
@@ -265,7 +265,7 @@ zip $GNAT_VMS_ROOT_PATH/dist/gnat-vms-bin.zip $GNAT_VMS_ROOT_PATH/dist/gcc.exe
 
 #### 5.3.2 Compiler crt files
 ```bash
-cd BUILD/gcc-${GCC_FULL_VERSION}-canadian/gcc
+cd $GNAT_VMS_ROOT_PATH/builds/4.7/ia64-hp-openvms-canadian/src/BUILD/gcc-4.7.4-canadian/gcc/
 zip $GNAT_VMS_ROOT_PATH/dist/gnat-vms-crt.zip pcrt0.o crtbegin.o crtend.o
 ```
 
