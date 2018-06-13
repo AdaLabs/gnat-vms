@@ -192,7 +192,11 @@ sudo nano ia64-hp-openvms-gcc
 Add the following content to the script file (/opt/local/4.7/ia64-hp-openvms/bin/ia64-hp-openvms-gcc)
 ```bash
 #!/bin/bash
-ia64-hp-openvms-gcc.exe --RTS=/opt/local/4.7/ia64-hp-openvms/lib/gcc/ia64-hp-openvms/4.7.4/ "$@"
+if [[ "$@" = *"--RTS"* ]]; then
+   ia64-hp-openvms-gcc.exe "$@"
+else
+   ia64-hp-openvms-gcc.exe --RTS=/opt/local/4.7/ia64-hp-openvms/lib/gcc/ia64-hp-openvms/4.7.4/ "$@"
+fi
 ```
 
 #### 4.2.4 Little tweak for ia64-hp-openvms-gnatmake
@@ -210,7 +214,11 @@ sudo nano ia64-hp-openvms-gnatmake
 Add the following content to the script file (/opt/local/4.7/ia64-hp-openvms/bin/ia64-hp-openvms-gnatmake)
 ```bash
 #!/bin/bash
-ia64-hp-openvms-gnatmake.exe --RTS=/opt/local/4.7/ia64-hp-openvms/lib/gcc/ia64-hp-openvms/4.7.4/ "$@"
+if [[ "$@" = *"--RTS"* ]]; then
+   ia64-hp-openvms-gnatmake.exe "$@"
+else
+   ia64-hp-openvms-gnatmake.exe --RTS=/opt/local/4.7/ia64-hp-openvms/lib/gcc/ia64-hp-openvms/4.7.4/ "$@"
+fi
 ```
 
 ## 5. Build canadian compiler
