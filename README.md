@@ -278,8 +278,11 @@ zip $GNAT_VMS_ROOT_PATH/dist/gnat-vms-crt.zip pcrt0.o crtbegin.o crtend.o
 ```
 
 #### 5.3.3 Compiler Ada runtime files
+
+:warning: Warning !, sudo is used here.
 ```bash
 cd /opt/local/4.7/canadian/lib/gcc/ia64-hp-openvms/4.7.4/
+sudo cp $GNAT_VMS_ROOT_PATH/builds/4.7/ia64-hp-openvms-canadian/src/BUILD/gcc-4.7.4-canadian/gcc/libgcc.a adalib
 zip -r $GNAT_VMS_ROOT_PATH/dist/gnat-vms-rts.zip adalib adainclude
 ```
 
