@@ -80,7 +80,7 @@ ia64_vms_fallback_frame_state (struct _Unwind_Context *context,
   CHF64$SIGNAL_ARRAY *chfsig64;
   INTSTK * intstk;
 
-  static int eh_debug = 1;//AL
+  static int eh_debug = 0;
   int try_bs_copy = 0;
   /* Non zero to attempt copy of alternate backing store contents for
      dirty partition in interrupted context. ??? Alpha code, only activated
